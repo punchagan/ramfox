@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 import json
 import os
+import subprocess
 from sys import platform as _platform
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+ADDON_DIR = os.path.join(HERE, 'add-on')
 
 
 def write_native_app_json():
@@ -45,6 +47,46 @@ def create_native_manifest(json_path):
         os.link(json_path, dst_path)
 
 
-if __name__ == '__main__':
+def setup_extension():
     json_path = write_native_app_json()
     create_native_manifest(json_path)
+
+
+def start_web_ext(executable, profile_dir):
+    env = os.environ.copy()
+    env['_MOZ_PROFILE_DIR'] = profile_dir
+    try:
+        subprocess.check_call(
+            [
+                'web-ext',
+                'run',
+                '-f',
+                executable,
+                '-p',
+                profile_dir,
+                '--keep-profile-changes',
+            ],
+            cwd=ADDON_DIR,
+            env=env,
+        )
+    except Exception:
+        pass
+
+
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description='Start a Firefox instance with this add-on enabled.'
+    )
+    parser.add_argument(
+        '--firefox-binary',
+        default='firefox',
+        help='Name of (or path to) the Firefox binary',
+    )
+    parser.add_argument(
+        '--profile-dir', help='Path to profile dir', required=True
+    )
+    args = parser.parse_args()
+    setup_extension()
+    start_web_ext(executable=args.firefox_binary, profile_dir=args.profile_dir)
