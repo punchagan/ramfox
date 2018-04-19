@@ -43,8 +43,9 @@ def create_native_manifest(json_path):
         )
 
     os.makedirs(os.path.dirname(dst_path), exist_ok=True)
-    if not os.path.exists(dst_path):
-        os.link(json_path, dst_path)
+    if os.path.exists(dst_path):
+        os.unlink(dst_path)
+    os.link(json_path, dst_path)
 
 
 def setup_extension():
