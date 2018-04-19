@@ -25,11 +25,18 @@ I'd like to use a standard browser, with some additional functionality.
 
 ## Setup ##
 
-### Mac OS/Linux setup ###
+This add-on is a native extension with a lot of hacks that "work for me". It may
+never be published to the Mozilla Addons Directory.
 
-Just clone the repository, and run the script `run.py
+1. Clone this repository
+2. Install [web-ext](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Getting_started_with_web-ext#Installation)
+3. Create a new profile in Firefox
+4. Run the script `run.py` passing the path of the profile you created as the
+   `--profile-dir` argument
 
-### Windows setup ###
+   ```sh
+   $ /run.py --profile-dir ~/.mozilla/firefox-trunk/plpouotz.Chat/ --firefox-binary firefox-trunk
+   ```
 
 **NOTE**: Windows is not yet supported
 
