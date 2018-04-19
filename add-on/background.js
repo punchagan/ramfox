@@ -28,5 +28,7 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   ) {
     port.postMessage(JSON.stringify({ url: changeInfo.url }));
     browser.tabs.remove(tabId);
+  } else if (changeInfo.favIconUrl) {
+    browser.tabs.executeScript(tabId, { file: "/favicon.js" });
   }
 });
